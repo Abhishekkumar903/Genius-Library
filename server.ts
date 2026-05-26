@@ -108,13 +108,22 @@ async function startServer() {
 
   // Auth Routes
   app.post("/api/auth/login", (req, res) => {
-    const { username, password } = req.body;
-    const admin = db.prepare("SELECT * FROM admins WHERE username = ?").get(username) as any;
-    if (admin && bcrypt.compareSync(password, admin.password)) {
-      const token = jwt.sign({ id: admin.id, username: admin.username }, JWT_SECRET, { expiresIn: "24h" });
-      res.json({ token });
-    } else {
-      res.status(401).json({ error: "Invalid credentials" });
+    try {
+      const { username, password } = req.body;
+      if (!username || !password) {
+        return res.status(400).json({ error: "Username and password are required" });
+      }
+      
+      const admin = db.prepare("SELECT * FROM admins WHERE username = ?").get(username) as any;
+      if (admin && bcrypt.compareSync(password, admin.password)) {
+        const token = jwt.sign({ id: admin.id, username: admin.username }, JWT_SECRET, { expiresIn: "24h" });
+        res.json({ token });
+      } else {
+        res.status(401).json({ error: "Invalid credentials" });
+      }
+    } catch (err: any) {
+      console.error("Login error detail:", err);
+      res.status(500).json({ error: `Internal Server Error: ${err.message || err}` });
     }
   });
 
