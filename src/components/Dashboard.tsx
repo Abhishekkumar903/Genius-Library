@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Users, Grid, CheckCircle, AlertCircle, TrendingUp, Wallet } from "lucide-react";
 import { motion } from "motion/react";
+import { API_BASE_URL } from "../constants";
 
 interface Stats {
   totalSeats: number;
@@ -21,7 +22,7 @@ export default function Dashboard({ token, onLogout }: { token: string; onLogout
 
   const fetchStats = async () => {
     try {
-      const res = await fetch("/api/stats", {
+      const res = await fetch(`${API_BASE_URL}/api/stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.status === 401) {

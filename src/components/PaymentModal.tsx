@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { X, Wallet, Calendar } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { API_BASE_URL } from "../constants";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -30,7 +31,7 @@ export default function PaymentModal({ isOpen, onClose, student, token, onSucces
     setLoading(true);
 
     try {
-      const res = await fetch("/api/payments", {
+      const res = await fetch(`${API_BASE_URL}/api/payments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

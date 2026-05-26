@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import StudentModal from "./StudentModal";
 import PaymentModal from "./PaymentModal";
 import InvoiceModal from "./InvoiceModal";
+import { API_BASE_URL } from "../constants";
 
 interface Student {
   id: number;
@@ -33,7 +34,7 @@ export default function StudentList({ token, onLogout }: { token: string; onLogo
 
   const fetchStudents = async () => {
     try {
-      const res = await fetch("/api/students", {
+      const res = await fetch(`${API_BASE_URL}/api/students`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.status === 401) {
@@ -57,7 +58,7 @@ export default function StudentList({ token, onLogout }: { token: string; onLogo
   const handleDelete = async (id: number) => {
     if (!confirm("Are you sure you want to delete this student?")) return;
     try {
-      await fetch(`/api/students/${id}`, {
+      await fetch(`${API_BASE_URL}/api/students/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

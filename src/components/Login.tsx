@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { LogIn, User, Lock } from "lucide-react";
 import { motion } from "motion/react";
+import { API_BASE_URL } from "../constants";
 
 export default function Login({ onLogin }: { onLogin: (token: string) => void }) {
   const [username, setUsername] = useState("");
@@ -14,7 +15,7 @@ export default function Login({ onLogin }: { onLogin: (token: string) => void })
     setError("");
 
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

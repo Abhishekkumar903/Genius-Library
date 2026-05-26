@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { User, Clock, AlertCircle, Grid } from "lucide-react";
+import { API_BASE_URL } from "../constants";
 
 interface Seat {
   id: string;
@@ -23,7 +24,7 @@ export default function SeatGrid({ token, onLogout }: { token: string; onLogout?
 
   const fetchSeats = async () => {
     try {
-      const res = await fetch("/api/seats", {
+      const res = await fetch(`${API_BASE_URL}/api/seats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.status === 401) {

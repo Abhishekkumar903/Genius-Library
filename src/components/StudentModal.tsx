@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { SHIFT_OPTIONS } from "../constants";
+import { SHIFT_OPTIONS, API_BASE_URL } from "../constants";
 
 interface StudentModalProps {
   isOpen: boolean;
@@ -69,7 +69,7 @@ export default function StudentModal({ isOpen, onClose, student, token, onSucces
     setLoading(true);
 
     try {
-      const url = student ? `/api/students/${student.id}` : "/api/students";
+      const url = student ? `${API_BASE_URL}/api/students/${student.id}` : `${API_BASE_URL}/api/students`;
       const method = student ? "PUT" : "POST";
 
       const res = await fetch(url, {

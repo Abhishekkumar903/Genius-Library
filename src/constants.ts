@@ -10,3 +10,12 @@ export const SHIFT_OPTIONS = [
   { id: "12h-midday", label: "10:00AM - 10:00PM (12h)", fee: 600 },
   { id: "16h-full", label: "06:00AM - 10:00PM (16h)", fee: 700 },
 ];
+
+export const API_BASE_URL = typeof window !== "undefined" && (
+  window.location.hostname === "localhost" || 
+  window.location.hostname === "127.0.0.1" ||
+  window.location.hostname.includes(".run.app") || 
+  window.location.hostname.includes("aistudio.google")
+)
+  ? "" 
+  : "https://genius-library-production.up.railway.app";
