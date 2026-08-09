@@ -15,11 +15,19 @@ export default function Login({ onLogin }: { onLogin: (token: string) => void })
     setError("");
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      let res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
+
+      if (res.status === 404) {
+        res = await fetch(`${API_BASE_URL}/api/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+      }
 
       const text = await res.text();
       let data: any = {};

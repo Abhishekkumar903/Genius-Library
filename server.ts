@@ -108,8 +108,8 @@ async function startServer() {
     }
   };
 
-  // Auth Routes
-  app.post("/api/auth/login", (req, res) => {
+  // Auth Routes (Supporting both /api/auth/login and /api/login)
+  app.post(["/api/auth/login", "/api/login"], (req, res) => {
     try {
       const { username, password } = req.body;
       if (!username || !password) {
