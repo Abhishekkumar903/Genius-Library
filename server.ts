@@ -57,9 +57,11 @@ db.exec(`
 
 // Seed Admin if not exists
 const adminExists = db.prepare("SELECT * FROM admins WHERE username = ?").get("admin");
+const defaultHashedPassword = bcrypt.hashSync("admin123", 10);
 if (!adminExists) {
-  const hashedPassword = bcrypt.hashSync("admin123", 10);
-  db.prepare("INSERT INTO admins (username, password) VALUES (?, ?)").run("admin", hashedPassword);
+  db.prepare("INSERT INTO admins (username, password) VALUES (?, ?)").run("admin", defaultHashedPassword);
+} else {
+  db.prepare("UPDATE admins SET password = ? WHERE username = ?").run(defaultHashedPassword, "admin");
 }
 
 // Seed Seats if not exists or if count is wrong

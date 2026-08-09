@@ -21,15 +21,22 @@ export default function Login({ onLogin }: { onLogin: (token: string) => void })
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await res.json();
+      const text = await res.text();
+      let data: any = {};
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = { error: `Server error (${res.status})` };
+      }
+
       if (res.ok) {
         onLogin(data.token);
       } else {
-        setError(data.error || "Login failed");
+        setError(data.error || "Invalid username or password");
       }
     } catch (err: any) {
       console.error("Login fetch error:", err);
-      setError(err?.message || "Network error: Unable to connect to server");
+      setError("Network error: Unable to connect to server. Please try again.");
     } finally {
       setLoading(false);
     }
