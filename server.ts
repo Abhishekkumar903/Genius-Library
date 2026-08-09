@@ -108,10 +108,10 @@ async function startServer() {
     }
   };
 
-  // Auth Routes (Supporting both /api/auth/login and /api/login)
-  app.post(["/api/auth/login", "/api/login"], (req, res) => {
+  // Auth Handler
+  const handleLogin = (req: express.Request, res: express.Response) => {
     try {
-      const { username, password } = req.body;
+      const { username, password } = req.body || {};
       if (!username || !password) {
         return res.status(400).json({ error: "Username and password are required" });
       }
@@ -119,15 +119,18 @@ async function startServer() {
       const admin = db.prepare("SELECT * FROM admins WHERE username = ?").get(username) as any;
       if (admin && bcrypt.compareSync(password, admin.password)) {
         const token = jwt.sign({ id: admin.id, username: admin.username }, JWT_SECRET, { expiresIn: "24h" });
-        res.json({ token });
+        return res.json({ token });
       } else {
-        res.status(401).json({ error: "Invalid credentials" });
+        return res.status(401).json({ error: "Invalid username or password" });
       }
     } catch (err: any) {
       console.error("Login error detail:", err);
-      res.status(500).json({ error: `Internal Server Error: ${err.message || err}` });
+      return res.status(500).json({ error: `Internal Server Error: ${err.message || err}` });
     }
-  });
+  };
+
+  app.post("/api/auth/login", handleLogin);
+  app.post("/api/login", handleLogin);
 
   // Dashboard Stats
   app.get("/api/stats", authenticate, (req, res) => {

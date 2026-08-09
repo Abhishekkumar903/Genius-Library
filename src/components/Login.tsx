@@ -14,15 +14,24 @@ export default function Login({ onLogin }: { onLogin: (token: string) => void })
     setLoading(true);
     setError("");
 
-    try {
-      let res = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+    const primaryUrl = `${API_BASE_URL}/api/auth/login`;
+    const secondaryUrl = `${API_BASE_URL}/api/login`;
 
-      if (res.status === 404) {
-        res = await fetch(`${API_BASE_URL}/api/login`, {
+    try {
+      let res: Response | null = null;
+      
+      try {
+        res = await fetch(primaryUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+      } catch (err) {
+        // Fallback to secondary if primary fetch threw NetworkError
+      }
+
+      if (!res || res.status === 404) {
+        res = await fetch(secondaryUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),
@@ -34,17 +43,17 @@ export default function Login({ onLogin }: { onLogin: (token: string) => void })
       try {
         data = text ? JSON.parse(text) : {};
       } catch {
-        data = { error: `Server error (${res.status})` };
+        data = { error: `Server response error (${res.status})` };
       }
 
-      if (res.ok) {
+      if (res.ok && data.token) {
         onLogin(data.token);
       } else {
         setError(data.error || "Invalid username or password");
       }
     } catch (err: any) {
       console.error("Login fetch error:", err);
-      setError("Network error: Unable to connect to server. Please try again.");
+      setError("Network error: Unable to connect to server");
     } finally {
       setLoading(false);
     }
@@ -109,6 +118,10 @@ export default function Login({ onLogin }: { onLogin: (token: string) => void })
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
+
+          <p className="text-xs text-center text-slate-400 pt-2">
+            Default Admin: <span className="font-mono text-slate-600">admin</span> / <span className="font-mono text-slate-600">admin123</span>
+          </p>
         </form>
       </motion.div>
     </div>
