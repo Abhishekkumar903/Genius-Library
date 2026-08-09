@@ -27,8 +27,9 @@ export default function Login({ onLogin }: { onLogin: (token: string) => void })
       } else {
         setError(data.error || "Login failed");
       }
-    } catch (err) {
-      setError("Network error");
+    } catch (err: any) {
+      console.error("Login fetch error:", err);
+      setError(err?.message || "Network error: Unable to connect to server");
     } finally {
       setLoading(false);
     }
