@@ -1,5 +1,6 @@
 {
   "name": "Genius Library - Management System",
   "description": "A comprehensive library management system with seat tracking, student records, automated invoicing, and payment reminders.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
