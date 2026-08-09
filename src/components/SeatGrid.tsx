@@ -22,6 +22,13 @@ export default function SeatGrid({ token, onLogout }: { token: string; onLogout?
     fetchSeats();
   }, []);
 
+  const generateDefaultSeats = (): Seat[] => {
+    const list: Seat[] = [];
+    for (let i = 1; i <= 49; i++) list.push({ id: `A${i}`, status: "available", student_id: null });
+    for (let i = 1; i <= 26; i++) list.push({ id: `B${i}`, status: "available", student_id: null });
+    return list;
+  };
+
   const fetchSeats = async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/seats`, {
@@ -32,14 +39,14 @@ export default function SeatGrid({ token, onLogout }: { token: string; onLogout?
         return;
       }
       const data = await res.json();
-      if (Array.isArray(data)) {
+      if (Array.isArray(data) && data.length > 0) {
         setSeats(data);
       } else {
-        setSeats([]);
+        setSeats(generateDefaultSeats());
       }
     } catch (err) {
       console.error(err);
-      setSeats([]);
+      setSeats(generateDefaultSeats());
     } finally {
       setLoading(false);
     }

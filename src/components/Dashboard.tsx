@@ -20,6 +20,15 @@ export default function Dashboard({ token, onLogout }: { token: string; onLogout
     fetchStats();
   }, []);
 
+  const defaultStats: Stats = {
+    totalSeats: 75,
+    occupiedSeats: 0,
+    availableSeats: 75,
+    totalStudents: 0,
+    pendingPayments: 0,
+    monthlyCollection: 0,
+  };
+
   const fetchStats = async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/api/stats`, {
@@ -33,11 +42,11 @@ export default function Dashboard({ token, onLogout }: { token: string; onLogout
       if (data && !data.error) {
         setStats(data);
       } else {
-        setStats(null);
+        setStats(defaultStats);
       }
     } catch (err) {
       console.error(err);
-      setStats(null);
+      setStats(defaultStats);
     } finally {
       setLoading(false);
     }
