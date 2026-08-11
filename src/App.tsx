@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Layout, Dashboard, SeatGrid, StudentList, Login } from "./components";
+import { Layout, Dashboard, SeatGrid, StudentList, ReportsView, Login } from "./components";
 
 export default function App() {
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
-  const [view, setView] = useState<"dashboard" | "seats" | "students">("dashboard");
+  const [view, setView] = useState<"dashboard" | "seats" | "students" | "reports">("dashboard");
 
   useEffect(() => {
     if (token) {
@@ -22,6 +22,7 @@ export default function App() {
       {view === "dashboard" && <Dashboard token={token} onLogout={() => setToken(null)} />}
       {view === "seats" && <SeatGrid token={token} onLogout={() => setToken(null)} />}
       {view === "students" && <StudentList token={token} onLogout={() => setToken(null)} />}
+      {view === "reports" && <ReportsView token={token} />}
     </Layout>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LayoutDashboard, Users, Grid, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, Users, Grid, FileBarChart, LogOut, Menu, X } from "lucide-react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,7 +14,8 @@ export default function Layout({ children, currentView, setView, onLogout }: Lay
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "seats", label: "Seat Management", icon: Grid },
-    { id: "students", label: "Students", icon: Users },
+    { id: "students", label: "Students & Fee Profile", icon: Users },
+    { id: "reports", label: "Fee Reports & Ledger", icon: FileBarChart },
   ];
 
   return (
@@ -31,7 +32,10 @@ export default function Layout({ children, currentView, setView, onLogout }: Lay
               <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">G</span>
               </div>
-              <span className="font-bold text-xl text-slate-900">Genius Library</span>
+              <div>
+                <span className="font-bold text-lg text-slate-900 block leading-tight">Genius Library</span>
+                <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">Admin System</span>
+              </div>
             </div>
             <button className="md:hidden" onClick={() => setIsMobileMenuOpen(false)}>
               <X className="w-6 h-6 text-slate-500" />
@@ -47,10 +51,10 @@ export default function Layout({ children, currentView, setView, onLogout }: Lay
                   setIsMobileMenuOpen(false);
                 }}
                 className={`
-                  w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all
+                  w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm
                   ${currentView === item.id 
-                    ? "bg-indigo-50 text-indigo-600 font-semibold" 
-                    : "text-slate-600 hover:bg-slate-50"}
+                    ? "bg-indigo-50 text-indigo-600 font-bold shadow-sm" 
+                    : "text-slate-600 hover:bg-slate-50 font-medium"}
                 `}
               >
                 <item.icon className="w-5 h-5" />
@@ -62,7 +66,7 @@ export default function Layout({ children, currentView, setView, onLogout }: Lay
           <div className="p-4 border-t border-slate-100">
             <button 
               onClick={onLogout}
-              className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-all"
+              className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-xl transition-all font-semibold text-sm"
             >
               <LogOut className="w-5 h-5" />
               Logout
